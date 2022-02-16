@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------------
 #
 # Package       : tmc/grpc-websocket-proxy
-# Version       : master
+# Version       : 673ab2c3ae75cc01952b84b88590e30e75dcf395
 # Source repo   : https://github.com/tmc/grpc-websocket-proxy
 # Tested on     : RHEL ubi 8.4
 # Language      : GO
@@ -20,8 +20,8 @@
 
 PACKAGE_PATH=github.com/tmc/
 PACKAGE_NAME=grpc-websocket-proxy
+PACKAGE_VERSION=${1:-673ab2c3ae75cc01952b84b88590e30e75dcf395}
 PACKAGE_URL=https://github.com/tmc/grpc-websocket-proxy
-
 
 # Install dependencies
 yum install -y make git wget gcc
@@ -38,19 +38,19 @@ mkdir -p $GOPATH/src/$PACKAGE_PATH
 cd $GOPATH/src/$PACKAGE_PATH
 git clone $PACKAGE_URL
 cd $PACKAGE_NAME
+git checkout $PACKAGE_VERSION
 
-echo "Building $PACKAGE_PATH$PACKAGE_NAME with master"
-
+echo "Building $PACKAGE_PATH$PACKAGE_NAME with $PACKAGE_VERSION"
 if ! go build -v ./...; then
-	echo "------------------$PACKAGE_NAME:build_fails-------------------------------------"
-	exit 1
+        echo "------------------$PACKAGE_NAME:build_fails-------------------------------------"
+        exit 0
 fi
 
-echo "Testing $PACKAGE_PATH$PACKAGE_NAME with master"
+echo "Testing $PACKAGE_PATH$PACKAGE_NAME with $PACKAGE_VERSION"
 if ! go test -v ./...; then
-	echo "------------------$PACKAGE_NAME:install_success_but_test_fails---------------------"
-	exit 1
-else
-	echo "------------------$PACKAGE_NAME:install_&_test_both_success-------------------------"
+        echo "------------------$PACKAGE_NAME:install_success_but_test_fails---------------------"
         exit 0
+else
+        echo "------------------$PACKAGE_NAME:install_&_test_both_success-------------------------"
+    exit 0
 fi
